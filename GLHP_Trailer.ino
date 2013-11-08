@@ -3,9 +3,9 @@ const int    SCR_Out      = 9;    // Output for SCR
 const int    Q_Set        = 3810; // Q constant variable
 const double R_Static     = 16.1; // Resistance of base heater
 const double R_SCR        = 12.4; // Resistance of variable heater
-const int    SCR_Max      = 102;   
+const int    SCR_Max      = 102;  // Max value of the SCR 
 
-int start = 1;
+int start                 = 1;    // For initial value stuff
 
 //For smoothing values of the inputs
 const int numReadings = 30;
@@ -21,7 +21,7 @@ int DC_Avg = 0;
 void setup() {
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
-  //Clear LCD Screen
+  //Clear LCD Screen and back light on
   Serial.write(12);
   Serial.write(17);
 }
@@ -29,6 +29,7 @@ void setup() {
 void loop() {
   
   if (start == 1){
+    //Set initial SCR Out Voltage to 0
     analogWrite(SCR_Out, SCR_Out_Set);
     start = 0;
   }
@@ -51,7 +52,7 @@ void Read_Input(int Read_Delay) {
   int DC_Voltage_Read[numReadings]; 
   int DC_Total = 0;
 
-  // Set all array contents to '0'
+  // Clear all array contents to '0'
   for (int ClrArray = 0; ClrArray < numReadings; ClrArray++){
     DC_Voltage_Read[ClrArray] = 0;
   }
@@ -119,4 +120,3 @@ void Print_Stuff() {
   Serial.print(SCR_Out_Set);
   delay(3000);
 }
-
