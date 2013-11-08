@@ -3,7 +3,7 @@ const int    SCR_Out      = 9;    // Output for SCR
 const int    Q_Set        = 3810; // Q constant variable
 const double R_Static     = 16.1; // Resistance of base heater
 const double R_SCR        = 12.4; // Resistance of variable heater
-const int    SCR_Max      = 102;  // Max value of the SCR 
+const int    SCR_Max      = 118;  // Max value of the SCR 
 
 int start                 = 1;    // For initial value stuff
 
@@ -34,7 +34,7 @@ void loop() {
     start = 0;
   }
   //Wait_Delay();
-  Read_Input(1000);
+  Read_Input(500);
   Convert_Data();
   Calculate_Data();  
   Print_Stuff(); 
@@ -79,7 +79,7 @@ void Convert_Data(){
 
   //Convert Raw data to Voltage
   DC_Voltage = DC_Avg * (5.0 / 1023);
-  SCR_Out_Voltage = (SCR_Out_Set * (5.0 / 255));
+  SCR_Out_Voltage = (SCR_Out_Set * (5.0 / 255))-.6364;
 
   //Convert DC To AC Voltage
   AC_Voltage = ((DC_Voltage * 208) / 4 );
@@ -91,8 +91,8 @@ void Calculate_Data(){
   
   P_SCR = ((R_SCR / pow(AC_Voltage,2)) * 
                   (Q_Set - ((pow(AC_Voltage,2)) / R_Static)));
-  
-  SCR_Out_Set = int(SCR_Max * P_SCR);
+                  
+  SCR_Out_Set = (SCR_Max - (P_SCR * 100));
 }
 
 void Output_to_SCR(){
