@@ -92,7 +92,7 @@ void Calculate_Data(){
   P_SCR = ((R_SCR / pow(AC_Voltage,2)) * 
                   (Q_Set - ((pow(AC_Voltage,2)) / R_Static)));
                   
-  SCR_Out_Set = (SCR_Max - (P_SCR * 100));
+  SCR_Out_Set = (SCR_Max * P_SCR) + 35;
 }
 
 void Output_to_SCR(){
