@@ -74,8 +74,7 @@ void Convert_Data(){
   SCR_Out_Voltage = (SCR_Out_Set * (5.0 / 255)) - 0.6364;
 
   //Convert DC To AC Voltage
-  AC_Voltage = (8.70e-3 * pow(DC_Voltage,2) + 4.538e1 *
-                  DC_Voltage + 2.379e1);
+  AC_Voltage = (29.236 * DC_Voltage + 85.77);
 }
 
 void Calculate_Data(){
@@ -84,9 +83,10 @@ void Calculate_Data(){
   double Q_Base = (pow(AC_Voltage,2)/R_Static); 
   //SCR calculations
   double Q_SCR = (Q_Set - Q_Base);
-  
-  SCR_Out_Set = int(-5.63e-6 * pow(Q_SCR,2) + 5.0e-2 *
-                Q_SCR + 1.23e1);
+  //Fraction of full power
+  double FFP = Q_SCR/(pow(AC_Voltage,2)/R_SCR);
+  //SCR Outputs in bits
+  SCR_Out_Set = int(-6.073e1 * pow(FFP,2) + 1.626e2 * FFP + 1.298e1);
 }
 //******Writes analog output D-A to SCR********
 void Output_to_SCR(){
