@@ -8,9 +8,9 @@ const double R_SCR            = 12.4; // Resistance of variable heater
 const int numReadings         = 30;   //For avg values of the inputs
 int start                     = 1;    // For initial value stuff
 int SCR_Out_Set               = 0;
-int DC_Avg                    = 0;    //Average RAW Values
-int Pump_Volts_Avg            = 0;
-int Pump_Amps_Avg             = 0;
+double DC_Avg                 = 0;    //Average RAW Values
+double Pump_Volts_Avg         = 0;
+double Pump_Amps_Avg          = 0;
 double DC_Voltage, AC_Voltage, SCR_Out_Voltage;  // Raw to Voltage
 double Pump_DC_Voltage, Pump_DC_Amps, Pump_Volts, Pump_Amps;
 double Q_Base, Q_Pump, Q_SCR, FFP;
@@ -34,8 +34,8 @@ void loop() {
   Read_Input(1000);
   Convert_Data();
   Calculate_Data();  
-  Print_Stuff(); 
-  Output_to_SCR();      
+  Output_to_SCR();
+  Print_Stuff();         
 }
 
 //******Reads the analog DC voltage*****************************
