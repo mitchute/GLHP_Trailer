@@ -4,18 +4,16 @@ const int    Pump_Volts_Pin     = A2;   // Pump power voltage
 const int    Pump_Amps_Pin      = A3;   // Pump power amps
 const int    SCR_Out_Pin        = 9;    // Output for SCR
 const int    Q_Set              = 3810; // Q constant variable
-const double R_Static           = 16.1; // Resistance of base heater
-const double R_SCR              = 12.4; // Resistance of variable heater
-const int numReadings           = 30;   //For avg values of the inputs
-int start                       = 1;    // For initial value stuff
-int SCR_Out_Set                 = 80;
-double Base_Avg                 = 0;
-double SCR_Avg                  = 0;
-double Pump_Volts_Avg           = 0;
-double Pump_Amps_Avg            = 0;
-double Base_DC_Voltage, SCR_DC_Voltage, SCR_Out_Voltage;  // Raw to Voltage
-double Pump_DC_Voltage, Pump_DC_Amps, Pump_Volts, Pump_Amps;
-double Q_Base, Q_Pump, Q_SCR, Q_Total;
+const int    numReadings        = 90;
+int    start                    = 1;
+int    SCR_Out_Set              = 80;
+float   Base_Avg                 = 0;
+float   SCR_Avg                  = 0;
+float   Pump_Volts_Avg           = 0;
+float   Pump_Amps_Avg            = 0;
+float   Base_DC_Voltage, SCR_DC_Voltage, SCR_Out_Voltage;  // Raw to Voltage
+float   Pump_DC_Voltage, Pump_DC_Amps, Pump_Volts, Pump_Amps;
+float   Q_Base, Q_Pump, Q_SCR, Q_Total;
 
 //******Initializes the communication and clears the LCD screen.
 void setup() {
@@ -148,7 +146,7 @@ void Print_Stuff() {
   Serial.print("Q.Base: ");
   Serial.print(Q_Base);
   Serial.write(13);
-  Serial.print("Q.SCR:");
+  Serial.print("Q.SCR: ");
   Serial.print(Q_SCR);
   Serial.write(13);
   Serial.print("Q.Tot: ");
