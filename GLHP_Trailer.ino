@@ -3,10 +3,10 @@ const int    SCR_Pin            = A1;   // DC voltage from SCR heater
 const int    Pump_Volts_Pin     = A2;   // Pump power voltage
 const int    Pump_Amps_Pin      = A3;   // Pump power amps
 const int    SCR_Out_Pin        = 9;    // Output for SCR
-const int    Q_Set              = 3810; // Q constant variable
+const int    Q_Set              = 2000; // Q constant variable
 const int    numReadings        = 90;
 int    start                    = 1;
-int    SCR_Out_Set              = 80;
+int    SCR_Out_Set              = 99;
 float   Base_Avg                 = 0;
 float   SCR_Avg                  = 0;
 float   Pump_Volts_Avg           = 0;
@@ -20,8 +20,8 @@ void setup() {
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
   //Clear LCD Screen and back light on
-  Serial.write(12);
-  Serial.write(17);
+//  Serial.write(12);
+//  Serial.write(17);
 }
 
 //******Main Driver********************************************
@@ -31,7 +31,7 @@ void loop() {
     analogWrite(SCR_Out_Pin, SCR_Out_Set);
     start = 0;
   }
-  Read_Input(1000);
+  Read_Input(500);
   Convert_Data();
   Calculate_Data(); 
   Output_to_SCR();
@@ -46,10 +46,10 @@ void Read_Input(int Read_Delay) {
   int SCR_Read[numReadings];
   int Pump_Volts_Read[numReadings];
   int Pump_Amps_Read[numReadings];
-  int Base_Total = 0;
-  int SCR_Total = 0;
-  int Pump_Volts_Total = 0;
-  int Pump_Amps_Total = 0;
+  float Base_Total = 0;
+  float SCR_Total = 0;
+  float Pump_Volts_Total = 0;
+  float Pump_Amps_Total = 0;
 
   // Clear all array contents to '0'
   for (int ClrArray = 0; ClrArray < numReadings; ClrArray++){
@@ -112,11 +112,11 @@ void Calculate_Data(){
   Q_Base = (Base_DC_Voltage / 10.0) * 5000; 
   
   //SCR heater
-  Q_SCR = (SCR_DC_Voltage / 10.0) * (20000/5);
+  Q_SCR = (SCR_DC_Voltage / 10.0) * (20000/4);
   
   //Total heat input
-  Q_Total = Q_Pump + Q_Base + Q_SCR;
-  
+//Q_Total = Q_Pump + Q_Base + Q_SCR;
+  Q_Total = Q_Pump + Q_SCR;
   //Feed back mechanism
   if (Q_Total < (Q_Set - 25) && Q_Total >= (Q_Set - 100)) {
     SCR_Out_Set += 1;
@@ -137,39 +137,41 @@ void Output_to_SCR(){
 
 //******Prints to the serial monitor***********
 void Print_Stuff() {
-  Serial.write(12);
-  Serial.write(17);
+  //Serial.write(12);
+  //Serial.write(17);
   delay(5);
-  Serial.print("Q.Pump: ");
-  Serial.print(Q_Pump);
-  Serial.write(13);
-  Serial.print("Q.Base: ");
-  Serial.print(Q_Base);
-  Serial.write(13);
-  Serial.print("Q.SCR: ");
-  Serial.print(Q_SCR);
-  Serial.write(13);
-  Serial.print("Q.Tot: ");
-  Serial.print(Q_Total);
- 
+  Serial.print("Q.Pump:\t");
+  Serial.println(Q_Pump);
+  //Serial.write(13);
+  Serial.print("Q.Base:\t");
+  //Serial.println(Q_Base);
+  Serial.println(0);
+  //Serial.write(13);
+  Serial.print("Q.SCR:\t");
+  Serial.println(Q_SCR);
+  //Serial.write(13);
+  Serial.print("Q.Tot:\t");
+  Serial.println(Q_Total);
+  Serial.println(); 
   //Correlated SCR Output voltage
   SCR_Out_Voltage = (1.78e-4 * pow(SCR_Out_Set,2)) - (6.92e-3 * SCR_Out_Set) + 3.62e-1;
   
-  delay(5000);
+  //delay(5000);
   
-  Serial.write(12);
-  Serial.write(17);
+  //Serial.write(12);
+  //Serial.write(17);
   delay(5);
-  Serial.print("SCR Out (V): ");
-  Serial.print(SCR_Out_Voltage);
-  Serial.write(13);
-  Serial.print("SCR Out Set: ");
-  Serial.print(SCR_Out_Set);
-  Serial.write(13);
-  Serial.print("Base VDC: ");
-  Serial.print(Base_DC_Voltage);
-  Serial.write(13);
-  Serial.print("SCR VDC: ");
-  Serial.print(SCR_DC_Voltage);
+  Serial.print("SCR Out (V):\t");
+  Serial.println(SCR_Out_Voltage);
+  //Serial.write(13);
+  Serial.print("SCR Out Set:\t");
+  Serial.println(SCR_Out_Set);
+  //Serial.write(13);
+  Serial.print("Base VDC:\t");
+  Serial.println(Base_DC_Voltage);
+  //Serial.write(13);
+  Serial.print("SCR VDC:\t");
+  Serial.println(SCR_DC_Voltage);
+  Serial.println();
 
 }
