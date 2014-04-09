@@ -3,10 +3,10 @@ const int    SCR_Pin            = A1;   // DC voltage from SCR heater
 const int    Pump_Volts_Pin     = A2;   // Pump power voltage
 const int    Pump_Amps_Pin      = A3;   // Pump power amps
 const int    SCR_Out_Pin        = 9;    // Output for SCR
-const int    Q_Set              = 2000; // Q constant variable
+const int    Q_Set              = 4000; // Q constant variable
 const int    numReadings        = 90;
 int    start                    = 1;
-int    SCR_Out_Set              = 99;
+int    SCR_Out_Set              = 89;
 float   Base_Avg                 = 0;
 float   SCR_Avg                  = 0;
 float   Pump_Volts_Avg           = 0;
@@ -31,7 +31,7 @@ void loop() {
     analogWrite(SCR_Out_Pin, SCR_Out_Set);
     start = 0;
   }
-  Read_Input(500);
+  Read_Input(250);
   Convert_Data();
   Calculate_Data(); 
   Output_to_SCR();
@@ -112,20 +112,20 @@ void Calculate_Data(){
   Q_Base = (Base_DC_Voltage / 10.0) * 5000; 
   
   //SCR heater
-  Q_SCR = (SCR_DC_Voltage / 10.0) * (20000/4);
+  Q_SCR = (SCR_DC_Voltage / 10.0) * (20000/1);
   
   //Total heat input
 //Q_Total = Q_Pump + Q_Base + Q_SCR;
   Q_Total = Q_Pump + Q_SCR;
   //Feed back mechanism
-  if (Q_Total < (Q_Set - 25) && Q_Total >= (Q_Set - 100)) {
+  if (Q_Total < (Q_Set - 50) && Q_Total >= (Q_Set - 150)) {
     SCR_Out_Set += 1;
-  } else if (Q_Total > (Q_Set + 25) && Q_Total <= (Q_Set + 100)) {
+  } else if (Q_Total > (Q_Set + 50) && Q_Total <= (Q_Set + 150)) {
     SCR_Out_Set -= 1;
-  } else if (Q_Total > (Q_Set + 100)) {
-    SCR_Out_Set -= 2;
-  } else if (Q_Total < (Q_Set - 100)) {
-    SCR_Out_Set += 2;
+  } else if (Q_Total > (Q_Set + 150)) {
+    SCR_Out_Set -= 1;
+  } else if (Q_Total < (Q_Set - 150)) {
+    SCR_Out_Set += 1;
   } 
 }
 
@@ -173,5 +173,6 @@ void Print_Stuff() {
   Serial.print("SCR VDC:\t");
   Serial.println(SCR_DC_Voltage);
   Serial.println();
+  Serial.println("***************************");
 
 }
